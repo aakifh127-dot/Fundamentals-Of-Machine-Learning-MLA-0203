@@ -1,0 +1,30 @@
+from sklearn.tree import DecisionTreeClassifier
+
+# Features: Income (in thousands), Debt (in thousands),
+# Payment History (1 = Good, 0 = Poor)
+
+X = [
+    [80, 10, 1],
+    [70, 15, 1],
+    [30, 25, 0],
+    [25, 30, 0],
+    [90, 10, 1],
+    [40, 20, 0],
+    [85, 15, 1],
+    [35, 28, 0]
+]
+
+# 1 = Good Credit, 0 = Bad Credit
+y = [1, 1, 0, 0, 1, 0, 1, 0]
+
+# Train model
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X, y)
+
+# Predict credit score category
+prediction = model.predict([[75, 12, 1]])
+
+if prediction[0] == 1:
+    print("Credit Score Category: Good")
+else:
+    print("Credit Score Category: Bad")

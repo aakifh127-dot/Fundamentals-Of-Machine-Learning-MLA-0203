@@ -1,0 +1,13 @@
+
+from sklearn.datasets import load_iris
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.model_selection import train_test_split
+
+X, y = load_iris(return_X_y=True)
+a, b, c, d = train_test_split(X, y, test_size=0.2, random_state=42)
+
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(a, c)
+
+print("Predictions:", model.predict(b))
+print("Accuracy:", model.score(b, d))

@@ -1,0 +1,16 @@
+import csv
+
+with open("finds.csv") as f:
+    data = list(csv.reader(f))[1:]
+
+h = ['0'] * 6
+
+for row in data:
+    if row[-1] == "Yes":
+        for i in range(6):
+            if h[i] == '0':
+                h[i] = row[i]
+            elif h[i] != row[i]:
+                h[i] = '?'
+
+print("Final Hypothesis:", h)

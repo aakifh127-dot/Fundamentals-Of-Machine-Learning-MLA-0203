@@ -1,0 +1,25 @@
+import numpy as np
+from sklearn.mixture import GaussianMixture
+
+# Dataset
+X = np.array([
+    [1], [2], [3], [4], [5],
+    [20], [21], [22], [23], [24]
+])
+
+# Create Gaussian Mixture Model
+model = GaussianMixture(
+    n_components=2,
+    random_state=42,
+    n_init=5
+)
+
+# Apply EM algorithm
+model.fit(X)
+
+# Predict clusters
+labels = model.predict(X)
+
+print("Data:", X.flatten())
+print("Cluster Labels:", labels)
+print("Cluster Means:", np.round(model.means_.flatten(), 2))

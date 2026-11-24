@@ -1,0 +1,59 @@
+import pandas as pd
+import math
+
+data = pd.read_csv("playtennis.csv")
+
+def entropy(s):
+    p = s.value_counts() / len(s)
+    return -sum(p * p.apply(math.log2))
+
+def id3(data, target):
+    if len(data[target].unique()) == 1:
+        return data[target].iloc[0]
+
+    attrs = [x for x in data.columns if x != target]
+
+    if not attrs:
+        return data[target].mode()[0]
+
+    def gain(a):
+        g = entropy(data[target])
+
+        for v in data[a].unique():
+            d = data[data[a] == v]
+            g -= len(d) / len(data) * entropy(d[target])
+
+        return g
+
+    best = max(attrs, key=gain)
+    tree = {best: {}}
+
+    for v in data[best].unique():
+        d = data[data[best] == v].drop(columns=[best])
+        tree[best][v] = id3(d, target)
+
+    return tree
+
+def predict(tree, sample):
+    if not isinstance(tree, dict):
+        return tree
+
+    attr = next(iter(tree))
+    value = sample[attr]
+
+    return predict(tree[attr][value], sample)
+
+tree = id3(data, "PlayTennis")
+
+print("Decision Tree:")
+print(tree)
+
+sample = {
+    "Outlook": "Sunny",
+    "Temperature": "Cool",
+    "Humidity": "Normal",
+    "Wind": "Weak"
+}
+
+print("\nNew Sample:", sample)
+print("Prediction:", predict(tree, sample))
